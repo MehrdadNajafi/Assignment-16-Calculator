@@ -1,4 +1,5 @@
 import math
+from functools import partial
 
 from PySide6.QtWidgets import *
 from PySide6.QtUiTools import *
@@ -20,16 +21,10 @@ class Calculator(QMainWindow):
         self.ui = loader.load('form.ui', None)
         self.ui.show()
         
-        self.ui.btn_1.clicked.connect(self.btn_1)
-        self.ui.btn_2.clicked.connect(self.btn_2)
-        self.ui.btn_3.clicked.connect(self.btn_3)
-        self.ui.btn_4.clicked.connect(self.btn_4)
-        self.ui.btn_5.clicked.connect(self.btn_5)
-        self.ui.btn_6.clicked.connect(self.btn_6)
-        self.ui.btn_7.clicked.connect(self.btn_7)
-        self.ui.btn_8.clicked.connect(self.btn_8)
-        self.ui.btn_9.clicked.connect(self.btn_9)
-        self.ui.btn_0.clicked.connect(self.btn_0)
+        self.btn_number_list = [self.ui.btn_0, self.ui.btn_1, self.ui.btn_2, self.ui.btn_3, self.ui.btn_4,
+                                self.ui.btn_5, self.ui.btn_6, self.ui.btn_7, self.ui.btn_8, self.ui.btn_9]
+        for i in range(10):
+            self.btn_number_list[i].clicked.connect(partial(self.btn_numbers, i))
 
         self.ui.btn_clear.clicked.connect(self.btn_clear)
         self.ui.btn_equal.clicked.connect(self.btn_equal)
@@ -55,6 +50,12 @@ class Calculator(QMainWindow):
         self.flag_for_minus = False
         self.flag_for_multi = False
         self.flag_for_div = False
+
+    def btn_numbers(self, num):
+        if self.ui.textbox.text() == '0':
+            self.ui.textbox.setText(str(num))
+        else:
+            self.ui.textbox.setText(self.ui.textbox.text() + str(num))
 
     def btn_sum(self):
         num = float(self.ui.textbox.text())
@@ -158,9 +159,7 @@ class Calculator(QMainWindow):
         try:
             result = int_or_float(result)
             self.ui.textbox.setText(str(result))
-            print(self.num_list)
             self.num_list.clear()
-            print(self.num_list)
         
         except:
             pass
@@ -170,68 +169,6 @@ class Calculator(QMainWindow):
         self.num_list.clear()
         self.ui.textbox.setText('0')
     
-    
-    def btn_1(self):
-        if self.ui.textbox.text() == '0':
-            self.ui.textbox.setText('1')
-        else:
-            self.ui.textbox.setText(self.ui.textbox.text() + '1')
-
-    def btn_2(self):
-        if self.ui.textbox.text() == '0':
-            self.ui.textbox.setText('2')
-        else:
-            self.ui.textbox.setText(self.ui.textbox.text() + '2')
-
-    def btn_3(self):
-        if self.ui.textbox.text() == '0':
-            self.ui.textbox.setText('3')
-        else:
-            self.ui.textbox.setText(self.ui.textbox.text() + '3')
-
-    def btn_4(self):
-        if self.ui.textbox.text() == '0':
-            self.ui.textbox.setText('4')
-        else:
-            self.ui.textbox.setText(self.ui.textbox.text() + '4')
-
-    def btn_5(self):
-        if self.ui.textbox.text() == '0':
-            self.ui.textbox.setText('5')
-        else:
-            self.ui.textbox.setText(self.ui.textbox.text() + '5')
-
-    def btn_6(self):
-        if self.ui.textbox.text() == '0':
-            self.ui.textbox.setText('6')
-        else:
-            self.ui.textbox.setText(self.ui.textbox.text() + '6')
-
-    def btn_7(self):
-        if self.ui.textbox.text() == '0':
-            self.ui.textbox.setText('7')
-        else:
-            self.ui.textbox.setText(self.ui.textbox.text() + '7')
-
-    def btn_8(self):
-        if self.ui.textbox.text() == '0':
-            self.ui.textbox.setText('8')
-        else:
-            self.ui.textbox.setText(self.ui.textbox.text() + '8')
-
-    def btn_9(self):
-        if self.ui.textbox.text() == '0':
-            self.ui.textbox.setText('9')
-        else:
-            self.ui.textbox.setText(self.ui.textbox.text() + '9')
-
-    def btn_0(self):
-        if self.ui.textbox.text() == '0':
-            self.ui.textbox.setText('0')
-        else:
-            self.ui.textbox.setText(self.ui.textbox.text() + '0')
-
-
 app = QApplication([])
 window = Calculator()
 app.exec()
